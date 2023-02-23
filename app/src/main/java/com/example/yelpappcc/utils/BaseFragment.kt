@@ -5,7 +5,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.yelpappcc.presentation.viewmodel.YelpViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 open class BaseFragment : Fragment() {
 
     protected val yelpViewModel by lazy {

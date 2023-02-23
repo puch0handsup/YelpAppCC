@@ -10,8 +10,11 @@ import android.os.Bundle
 import android.util.Log
 import com.example.yelpappcc.databinding.ActivityMainBinding
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "MainActivity"
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val binding by lazy {

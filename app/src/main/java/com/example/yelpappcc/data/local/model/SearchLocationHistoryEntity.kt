@@ -12,9 +12,9 @@ class SearchLocationHistoryEntity (
     val businessIdList : String
 )
 
-fun List<BusinessItem>.addLocationHistoryToDB() : SearchLocationHistoryEntity {
+fun List<BusinessItem?>?.addLocationHistoryToDB() : SearchLocationHistoryEntity {
     val gson = Gson()
     return SearchLocationHistoryEntity(
-        businessIdList = gson.toJson(this.map { it.id })
+        businessIdList = gson.toJson(this?.map { it?.id })
     )
 }
