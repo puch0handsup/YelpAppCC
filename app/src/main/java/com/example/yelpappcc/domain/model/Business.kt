@@ -13,13 +13,13 @@ data class Business(
     val distance: Double?,
     val phone: String?,
     val location: Location?,
-    val isFavorite : Boolean
+    var isFavorite : Boolean
 )
 
 fun List<BusinessEntity>?.mapToBusiness(): List<Business>? {
     return this?.map {
         val gson = Gson()
-        val stringType = object : TypeToken<List<String>>() {}.type
+        val locationType = object : TypeToken<Location>() {}.type
         Business(
             name = it.name,
             price = it.price,
@@ -27,7 +27,7 @@ fun List<BusinessEntity>?.mapToBusiness(): List<Business>? {
             rating = it.rating,
             distance = it.distance,
             phone = it.phone,
-            location = gson.fromJson(it.location, stringType),
+            location = gson.fromJson(it.location, locationType),
             isFavorite = it.isFavorite
         )
     }

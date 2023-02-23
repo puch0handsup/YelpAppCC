@@ -15,7 +15,7 @@ data class BusinessEntity(
     val distance: Double?,
     val phone: String?,
     val location: String?,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 )
 
 fun List<BusinessItem?>?.mapToBusinessEntity(): List<BusinessEntity>? {
