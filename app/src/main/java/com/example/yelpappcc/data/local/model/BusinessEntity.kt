@@ -14,14 +14,15 @@ data class BusinessEntity(
     val rating: Double?,
     val distance: Double?,
     val phone: String?,
-    val location: String?
+    val location: String?,
+    val isFavorite: Boolean = false
 )
 
-fun List<BusinessItem>?.mapToBusinessEntity(): List<BusinessEntity>? {
+fun List<BusinessItem?>?.mapToBusinessEntity(): List<BusinessEntity>? {
     return this?.map {
         val gson = Gson()
         BusinessEntity(
-            id = it.id!!,
+            id = it?.id!!,
             name = it.name,
             price = it.price,
             imageUrl = it.imageUrl,

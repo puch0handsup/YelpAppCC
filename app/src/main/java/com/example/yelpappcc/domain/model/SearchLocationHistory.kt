@@ -11,13 +11,13 @@ data class SearchLocationHistory(
     val businessIdList : List<String>?
 )
 
-fun SearchLocationHistoryEntity.getLocationHistory() : SearchLocationHistory {
+fun SearchLocationHistoryEntity?.mapToLocationHistory() : SearchLocationHistory {
     val gson = Gson()
     val stringType = object : TypeToken<List<String>>() {}.type
 
     return SearchLocationHistory(
-        id = this.id,
-        searchLocationName = this.searchLocationName,
-        businessIdList = gson.fromJson(this.businessIdList, stringType)
+        id = this?.id,
+        searchLocationName = this?.searchLocationName,
+        businessIdList = gson.fromJson(this?.businessIdList, stringType)
     )
 }

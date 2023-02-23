@@ -5,9 +5,13 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import com.example.yelpappcc.databinding.FragmentBusinessesListBinding
 import com.example.yelpappcc.utils.BaseFragment
+import com.example.yelpappcc.utils.UIState
 import com.google.android.gms.location.LocationServices
 
 private const val TAG = "BusinessesListFragment"
@@ -21,40 +25,58 @@ class BusinessesListFragment : BaseFragment() {
     private var arePermsGranted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val permissions = arrayListOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION,
         )
-
         // checkSelfPermission && requestPermissions come from context
         permissions.forEach {
             if (ActivityCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(requireActivity(), permissions.toTypedArray(), 900)
-            }else
+            }else {
                 arePermsGranted = true
+            }
         }
-
     }
 
     @SuppressLint("MissingPermission")
-    override fun onResume() {
-        super.onResume()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         if (arePermsGranted) {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
                     // Got last known location. In some rare situations this can be null.
                     location?.let {
                         yelpViewModel.location = location
-                        Log.d(TAG, "onResume: latitude: ${location.latitude}, longitude: ${location.longitude}")
+                        getBusinessesList()
+                        yelpViewModel.getBusinessesList()
                     } ?: run {
                         Log.e(TAG, "onResume: location came as null", )
                     }
                 }
         } else Log.e(TAG, "onResume: Permissions not granted", )
+        if (yelpViewModel.location != null)
+            getBusinessesList()
+        return binding.root
     }
+    
+    private fun getBusinessesList() {
+        Log.d(TAG, "getBusinessesList: it entered after the onCreateView")
+        Log.d(TAG, "getBusinessesList: ${yelpViewModel.location}")
+        yelpViewModel.businesses.observe(viewLifecycleOwner){ state ->
+            when(state) {
+                is UIState.LOADING -> {}
+                is UIState.SUCCESS -> {
+                    Log.d(TAG, "getBusinessesList: ${state.response}")
+                }
+                is UIState.ERROR -> {}
+            }
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>, // it is going to contained strings of permissions asked
