@@ -9,7 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Orientation
 import com.example.yelpappcc.databinding.FragmentBusinessesListBinding
+import com.example.yelpappcc.presentation.view.adapter.BusinessListAdapter
 import com.example.yelpappcc.utils.BaseFragment
 import com.example.yelpappcc.utils.UIState
 import com.google.android.gms.location.LocationServices
@@ -20,6 +24,12 @@ class BusinessesListFragment : BaseFragment() {
 
     private val binding by lazy {
         FragmentBusinessesListBinding.inflate(layoutInflater)
+    }
+
+    private val businessListAdapter by lazy {
+        BusinessListAdapter {
+            Log.d(TAG, "item selected $it: ")
+        }
     }
 
     private var arePermsGranted = false
@@ -60,6 +70,16 @@ class BusinessesListFragment : BaseFragment() {
         } else Log.e(TAG, "onResume: Permissions not granted", )
         if (yelpViewModel.location != null)
             getBusinessesList()
+
+        binding.rvBusinessList.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            adapter = businessListAdapter
+        }
+
         return binding.root
     }
     
@@ -71,6 +91,7 @@ class BusinessesListFragment : BaseFragment() {
                 is UIState.LOADING -> {}
                 is UIState.SUCCESS -> {
                     Log.d(TAG, "getBusinessesList: ${state.response}")
+                    businessListAdapter.updateBusinesses(state.response!!)
                 }
                 is UIState.ERROR -> {}
             }

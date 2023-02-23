@@ -1,6 +1,8 @@
 package com.example.yelpappcc.domain.use_cases
 
 import android.location.Location
+import android.util.Log
+import com.example.yelpappcc.data.local.model.BusinessEntity
 import com.example.yelpappcc.data.local.model.addLocationHistoryToDB
 import com.example.yelpappcc.data.local.model.mapToBusinessEntity
 import com.example.yelpappcc.domain.model.Business
@@ -28,6 +30,7 @@ class GetBusinessesByLocation @Inject constructor(
                 if (response.isSuccessful){
                     response.body()?.let {
                         // inserting businesses to db
+                        Log.d(TAG, "invoke: it.businesses.mapToBusinessEntity() = ${it.businesses.mapToBusinessEntity()}")
                         localRepository.insertBusinesses(it.businesses.mapToBusinessEntity())
                         // inserting the location history to db, and obtaining its id
                         val businessHistoryId = localRepository.insertSearchedLocation(it.businesses.addLocationHistoryToDB())
@@ -36,9 +39,13 @@ class GetBusinessesByLocation @Inject constructor(
                         // using this function to convert the json string saved to db, into a list of Ids associated with businesses
                         val locationHistory = locationHistoryEntity.mapToLocationHistory()
                         // after obtaining the list of IDs, search for the business list associated with those IDs.
-                        val businesses = localRepository.getBusinessesByIdList(locationHistory.businessIdList)
+                        Log.d(TAG, "invoke: locationHistory.businessIdList = ${locationHistory.businessIdList}")
+                        Log.d(TAG, "invoke: locationHistory.businessIdList = ${locationHistory.businessIdList!![2]}")
+                        
+                        var temp : List<BusinessEntity> = localRepository.getBusinessesByIdList(locationHistory.businessIdList)
+                        Log.d(TAG, "invoke: temp: ${temp[1]}")
                         // map entity to domain and emit
-                        emit(UIState.SUCCESS(businesses.mapToBusiness()))
+                        emit(UIState.SUCCESS(temp.mapToBusiness()))
                     } ?: throw Exception("null response body")
                 } else throw Exception(response.errorBody().toString())
             } catch (e : Exception) {

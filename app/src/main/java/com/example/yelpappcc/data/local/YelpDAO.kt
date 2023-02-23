@@ -23,7 +23,7 @@ interface YelpDAO {
     @Query("SELECT * from location_history WHERE id LIKE :id")
     suspend fun getSearchLocationHistoryById(id: Int) : SearchLocationHistoryEntity
 
-    @Query("SELECT * from businesses WHERE id IN(:businessesIdList)")
+    @Query("SELECT * from businesses WHERE id IN (:businessesIdList)")
     suspend fun getBusinessesByIdList(businessesIdList: List<String?>?): List<BusinessEntity>
 
     @Query("SELECT * from reviews WHERE businessId LIKE :businessId")
