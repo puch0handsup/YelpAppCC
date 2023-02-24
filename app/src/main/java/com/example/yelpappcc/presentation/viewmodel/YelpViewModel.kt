@@ -74,6 +74,7 @@ class YelpViewModel @Inject constructor(
     fun getBusinessesByHistory() {
         viewModelScope.launch {
             getBusinessListBySearchHistory(businessHistoryIdList).collect {
+                Log.d(TAG, "getBusinessesByHistory: $it")
                 _businessHistory.postValue(it)
             }
         }

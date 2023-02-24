@@ -20,18 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val permissions = arrayListOf(
-            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-        )
-
-        // checkSelfPermission && requestPermissions come from context
-        permissions.forEach {
-            if (checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(permissions.toTypedArray(), 900)
-            }
-        }
-
         val hostFragment = supportFragmentManager.findFragmentById(R.id.frag_container) as NavHostFragment
         binding.navigationBottom.setupWithNavController(hostFragment.navController)
     }

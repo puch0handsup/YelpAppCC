@@ -40,13 +40,13 @@ class BusinessesHistoryFragment : BaseFragment() {
         }
 
         getBusinessesList()
-        yelpViewModel.getHistory()
+        yelpViewModel.getBusinessesByHistory()
 
         return binding.root
     }
 
     private fun getBusinessesList() {
-        yelpViewModel.businesses.observe(viewLifecycleOwner){ state ->
+        yelpViewModel.businessHistory.observe(viewLifecycleOwner){ state ->
             when(state) {
                 is UIState.LOADING -> {}
                 is UIState.SUCCESS -> {

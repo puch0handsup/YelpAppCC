@@ -1,6 +1,7 @@
 package com.example.yelpappcc.presentation.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.yelpappcc.presentation.view.adapter.HistoryListAdapter
 import com.example.yelpappcc.utils.BaseFragment
 import com.example.yelpappcc.utils.UIState
 
+private const val TAG = "SearchHistoryFragment"
 class SearchHistoryFragment : BaseFragment() {
 
     private val binding by lazy {
@@ -22,6 +24,7 @@ class SearchHistoryFragment : BaseFragment() {
 
     private val historyListAdapter by lazy {
         HistoryListAdapter {
+            Log.d(TAG, "$it: ")
             yelpViewModel.businessHistoryIdList = it.businessIdList ?: listOf()
             findNavController().navigate(R.id.action_navigate_to_business_history_fragment)
         }
