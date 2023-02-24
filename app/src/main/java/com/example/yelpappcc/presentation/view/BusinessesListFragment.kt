@@ -33,7 +33,6 @@ class BusinessesListFragment : BaseFragment() {
         }
     }
 
-    private var arePermsGranted = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val permissions = arrayListOf(
@@ -42,10 +41,11 @@ class BusinessesListFragment : BaseFragment() {
         )
         // checkSelfPermission && requestPermissions come from context
         permissions.forEach {
-            if (ActivityCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(requireActivity(), permissions.toTypedArray(), 900)
-            }else {
-                arePermsGranted = true
+            if (ActivityCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED){
+                yelpViewModel.arePermsGranted = true
+            } else {
+                showError("Location permission was not granted. Cannot proceed")
+                yelpViewModel.arePermsGranted = false
             }
         }
     }
@@ -55,9 +55,14 @@ class BusinessesListFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (arePermsGranted) {
+        if (yelpViewModel.arePermsGranted == true) {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
             fusedLocationClient.lastLocation
+//            while (!task.isComplete)
+//                Log.d(TAG, "onCreateView: retrieving location")
+//            yelpViewModel.location = task.result
+//            getBusinessesList()
+//            yelpViewModel.getBusinessesList()
                 .addOnSuccessListener { location: Location? ->
                     // Got last known location. In some rare situations this can be null.
                     location?.let {
@@ -69,8 +74,6 @@ class BusinessesListFragment : BaseFragment() {
                     }
                 }
         } else Log.e(TAG, "onResume: Permissions not granted", )
-        if (yelpViewModel.location != null)
-            getBusinessesList()
 
         binding.rvBusinessList.apply {
             layoutManager = LinearLayoutManager(
@@ -95,20 +98,6 @@ class BusinessesListFragment : BaseFragment() {
                     businessListAdapter.updateBusinesses(state.response!!)
                 }
                 is UIState.ERROR -> {}
-            }
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>, // it is going to contained strings of permissions asked
-        grantResults: IntArray // it is going to contain if the permissions were granted or not
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == 900) {
-            grantResults.forEach {
-                arePermsGranted = it == PackageManager.PERMISSION_GRANTED
             }
         }
     }

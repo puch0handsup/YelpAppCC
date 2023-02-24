@@ -3,8 +3,14 @@
 
     <item
         android:id="@+id/business_list_frag"
-        android:title="Nearby"
+        android:title="@string/nearby"
         android:icon="@drawable/baseline_location_on_24">
+    </item>
+
+    <item
+        android:id="@+id/search_history_frag"
+        android:title="@string/history"
+        android:icon="@drawable/baseline_history_24">
     </item>
 
 </menu>

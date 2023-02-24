@@ -18,7 +18,7 @@ open class BaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    protected fun showError(message: String, action: () -> Unit) {
+    protected fun showError(message: String) {
         AlertDialog.Builder(requireActivity())
             .setTitle("Error Occurred")
             .setMessage(message)

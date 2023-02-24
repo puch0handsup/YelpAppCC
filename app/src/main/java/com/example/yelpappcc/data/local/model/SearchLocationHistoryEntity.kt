@@ -15,6 +15,7 @@ class SearchLocationHistoryEntity (
 fun List<BusinessItem?>?.addLocationHistoryToDB() : SearchLocationHistoryEntity {
     val gson = Gson()
     return SearchLocationHistoryEntity(
+        searchLocationName = "Near ${this?.get(0)?.location?.city}",
         businessIdList = gson.toJson(this?.map { it?.id })
     )
 }
