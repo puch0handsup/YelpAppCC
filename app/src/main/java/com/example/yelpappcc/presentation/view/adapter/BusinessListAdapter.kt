@@ -41,11 +41,14 @@ class BusinessListAdapter(
 class BusinessListViewHolder(
     private val binding: BusinessItemBinding
 ) : RecyclerView.ViewHolder(binding.root) {
+    private fun Double.format(digits: Int) = "%.${digits}f".format(this)
+    private fun Double.toMiles(): String = (this * 0.000189394).format(2)
     fun bind(item : Business, onClickBusiness: (Business) -> Unit) {
         binding.tvBusinessName.text = item.name
         binding.ratingBar.rating = item.rating!!.toFloat()
-        binding.tvRestaurantPrice.text = item.price
-        binding.tvDistance.text = item.distance!!.toInt().toString()
+        binding.tvReviewCount.text = item.reviewCount.toString()
+        binding.tvRestaurantPrice.text = item.price?: "New"
+        binding.tvDistance.text = "${item.distance?.toMiles()} mi away"
         binding.tvCity.text = item.location?.city
 
         itemView.setOnClickListener {
@@ -58,6 +61,6 @@ class BusinessListViewHolder(
             .centerCrop()
             .placeholder(R.drawable.baseline_fastfood_24)
             .error(R.drawable.baseline_no_food_24)
-            .into(binding.ivRestaurantImg)
+            .into(binding.ivRestaurantThumb)
     }
 }

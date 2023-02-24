@@ -5,6 +5,7 @@ import com.example.yelpappcc.data.remote.RequestInterceptor
 import com.example.yelpappcc.data.remote.YelpServiceApi
 import com.example.yelpappcc.domain.repository.LocalRepository
 import com.example.yelpappcc.domain.repository.RemoteRepository
+import com.example.yelpappcc.domain.use_cases.GetBusinessReviewsByBusinessId
 import com.example.yelpappcc.domain.use_cases.GetBusinessesByLocation
 import com.example.yelpappcc.utils.NetworkState
 import com.google.gson.Gson
@@ -12,7 +13,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -71,4 +71,12 @@ class NetworkModule {
         remoteRepository: RemoteRepository,
         networkState: NetworkState
     ) : GetBusinessesByLocation = GetBusinessesByLocation(localRepository, remoteRepository, networkState)
+
+    @Provides
+    @Singleton
+    fun providesGetReviewsByBusinessIdUseCase(
+        localRepository: LocalRepository,
+        remoteRepository: RemoteRepository,
+        networkState: NetworkState
+    ) : GetBusinessReviewsByBusinessId = GetBusinessReviewsByBusinessId(remoteRepository, localRepository, networkState)
 }

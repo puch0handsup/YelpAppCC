@@ -20,9 +20,9 @@ interface YelpServiceApi {
 
     @GET(BUSINESS_ID_PATH + BUSINESS_REVIEWS)
     suspend fun getRestaurantReviewsById(
-        @Path("id") reviewId : String,
+        @Path("id") businessId : String,
         @Query("sort_by") sort_by : String = "yelp_sort",
-        @Query("limit") limit : Int = 20
+        @Query("limit") limit : Int = 3
     ) : Response<ReviewResponse>
 
     companion object {

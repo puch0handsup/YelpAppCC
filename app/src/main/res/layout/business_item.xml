@@ -20,7 +20,7 @@
             android:text="PAPADEUX"
             android:textSize="15sp"
             android:layout_marginTop="3dp"
-            app:layout_constraintStart_toEndOf="@id/iv_restaurant_img"
+            app:layout_constraintStart_toEndOf="@id/iv_restaurant_thumb"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -45,7 +45,7 @@
             app:layout_constraintTop_toTopOf="@+id/location_pin" />
 
         <ImageView
-            android:id="@+id/iv_restaurant_img"
+            android:id="@+id/iv_restaurant_thumb"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_marginStart="10dp"
@@ -56,10 +56,10 @@
 
         <RatingBar
             android:id="@+id/rating_bar"
-            android:layout_marginTop="5dp"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="@+id/tv_business_name"
             app:layout_constraintTop_toBottomOf="@+id/tv_business_name" />
 
@@ -73,6 +73,17 @@
             app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
 
         <TextView
+            android:id="@+id/tv_review_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="11"
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
+            app:layout_constraintStart_toEndOf="@+id/rating_bar"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar" />
+
+        <TextView
             android:id="@+id/tv_separator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,8 +91,8 @@
             android:layout_marginStart="3dp"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
-            app:layout_constraintStart_toEndOf="@+id/rating_bar"
-            app:layout_constraintTop_toTopOf="@+id/rating_bar" />
+            app:layout_constraintStart_toEndOf="@+id/tv_review_count"
+            app:layout_constraintTop_toTopOf="@+id/rating_bar"/>
 
         <TextView
             android:id="@+id/tv_distance"

@@ -27,6 +27,6 @@ interface YelpDAO {
     suspend fun getBusinessesByIdList(businessesIdList: List<String?>?): List<BusinessEntity>
 
     @Query("SELECT * from reviews WHERE businessId LIKE :businessId")
-    suspend fun getReviewsByBusinessId(businessId: String) : List<ReviewEntity>?
+    suspend fun getReviewsByBusinessId(businessId: String) : List<ReviewEntity>
 
 }
