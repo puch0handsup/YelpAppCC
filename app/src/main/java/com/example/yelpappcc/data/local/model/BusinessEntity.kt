@@ -15,6 +15,7 @@ data class BusinessEntity(
     val distance: Double?,
     val phone: String?,
     val location: String?,
+    val reviewCount: Int?,
     var isFavorite: Boolean = false
 )
 
@@ -29,6 +30,7 @@ fun List<BusinessItem?>?.mapToBusinessEntity(): List<BusinessEntity>? {
             rating = it.rating,
             distance = it.distance,
             phone = it.phone,
+            reviewCount = it.reviewCount,
             location = gson.toJson(it.location)
         )
     }

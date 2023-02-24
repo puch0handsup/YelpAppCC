@@ -11,18 +11,20 @@ data class ReviewEntity(
     val userName: String?,
     val userImageUrl: String?,
     val rating: Int?,
-    val text: String?
+    val text: String?,
+    val timeCreated: String?,
 )
 
-fun List<ReviewItem>?.mapToReview(businessId: String?): List<ReviewEntity?>? {
+fun List<ReviewItem?>?.mapToReview(businessId: String?): List<ReviewEntity?>? {
     return this?.map {
         ReviewEntity(
-            id = it.id!!,
+            id = it?.id!!,
             businessId = businessId,
             userName = it.user?.name,
             userImageUrl = it.user?.imageUrl,
             rating = it.rating,
-            text = it.text
+            text = it.text,
+            timeCreated = it.timeCreated
         )
     }
 }

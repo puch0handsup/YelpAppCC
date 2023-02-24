@@ -9,6 +9,18 @@
         android:id="@+id/business_list_frag"
         android:name="com.example.yelpappcc.presentation.view.BusinessesListFragment"
         tools:layout="@layout/fragment_businesses_list"
-        android:label="Business List Fragment" />
+        android:label="Business List Fragment" >
+
+        <action
+            android:id="@+id/action_navigate_to_detail_fragment"
+            app:destination="@id/business_detail_frag" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/business_detail_frag"
+        android:name="com.example.yelpappcc.presentation.view.BusinessDetailFragment"
+        tools:layout="@layout/fragment_bussiness_detail"
+        android:label="Business Detail Fragment"/>
 
 </navigation>

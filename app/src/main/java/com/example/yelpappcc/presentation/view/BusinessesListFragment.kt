@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Orientation
+import com.example.yelpappcc.R
 import com.example.yelpappcc.databinding.FragmentBusinessesListBinding
 import com.example.yelpappcc.presentation.view.adapter.BusinessListAdapter
 import com.example.yelpappcc.utils.BaseFragment
@@ -19,7 +19,6 @@ import com.example.yelpappcc.utils.UIState
 import com.google.android.gms.location.LocationServices
 
 private const val TAG = "BusinessesListFragment"
-@Suppress("DEPRECATION")
 class BusinessesListFragment : BaseFragment() {
 
     private val binding by lazy {
@@ -29,6 +28,8 @@ class BusinessesListFragment : BaseFragment() {
     private val businessListAdapter by lazy {
         BusinessListAdapter {
             Log.d(TAG, "item selected $it: ")
+            yelpViewModel.selectedBusiness = it
+            findNavController().navigate(R.id.action_navigate_to_detail_fragment)
         }
     }
 

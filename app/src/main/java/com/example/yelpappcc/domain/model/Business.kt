@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 data class Business(
+    val id: String?,
     val name: String?,
     val price: String?,
     val imageUrl: String?,
@@ -13,6 +14,7 @@ data class Business(
     val distance: Double?,
     val phone: String?,
     val location: Location?,
+    val reviewCount: Int?,
     var isFavorite : Boolean
 )
 
@@ -21,6 +23,7 @@ fun List<BusinessEntity>?.mapToBusiness(): List<Business>? {
         val gson = Gson()
         val locationType = object : TypeToken<Location>() {}.type
         Business(
+            id = it.id,
             name = it.name,
             price = it.price,
             imageUrl = it.imageUrl,
@@ -28,6 +31,7 @@ fun List<BusinessEntity>?.mapToBusiness(): List<Business>? {
             distance = it.distance,
             phone = it.phone,
             location = gson.fromJson(it.location, locationType),
+            reviewCount = it.reviewCount,
             isFavorite = it.isFavorite
         )
     }
