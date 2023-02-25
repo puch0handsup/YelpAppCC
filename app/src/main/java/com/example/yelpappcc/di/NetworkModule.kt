@@ -5,8 +5,10 @@ import com.example.yelpappcc.data.remote.RequestInterceptor
 import com.example.yelpappcc.data.remote.YelpServiceApi
 import com.example.yelpappcc.domain.repository.LocalRepository
 import com.example.yelpappcc.domain.repository.RemoteRepository
+import com.example.yelpappcc.domain.use_cases.GetBusinessListBySearchHistory
 import com.example.yelpappcc.domain.use_cases.GetBusinessReviewsByBusinessId
 import com.example.yelpappcc.domain.use_cases.GetBusinessesByLocation
+import com.example.yelpappcc.domain.use_cases.GetSearchHistory
 import com.example.yelpappcc.utils.NetworkState
 import com.google.gson.Gson
 import dagger.Module
@@ -79,4 +81,15 @@ class NetworkModule {
         remoteRepository: RemoteRepository,
         networkState: NetworkState
     ) : GetBusinessReviewsByBusinessId = GetBusinessReviewsByBusinessId(remoteRepository, localRepository, networkState)
+
+    @Provides
+    fun providesGetLocationHistoryUseCase(
+        localRepository: LocalRepository
+    ) : GetSearchHistory = GetSearchHistory(localRepository)
+
+    @Provides
+    fun providesGetBusinessListBySearchHistory(
+        localRepository: LocalRepository
+    ) : GetBusinessListBySearchHistory = GetBusinessListBySearchHistory(localRepository)
+
 }

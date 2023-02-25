@@ -33,9 +33,8 @@ class BusinessesListFragment : BaseFragment() {
         }
     }
 
-    private var arePermsGranted = false
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         val permissions = arrayListOf(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -44,10 +43,26 @@ class BusinessesListFragment : BaseFragment() {
         permissions.forEach {
             if (ActivityCompat.checkSelfPermission(requireContext(), it) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(requireActivity(), permissions.toTypedArray(), 900)
-            }else {
-                arePermsGranted = true
+            } else {
+                yelpViewModel.arePermsGranted = true
+                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location: Location? ->
+                        // Got last known location. In some rare situations this can be null.
+                        location?.let {
+                            yelpViewModel.location = location
+                            getBusinessesList()
+                            yelpViewModel.getBusinessesList()
+                        } ?: run {
+                            showError("No location found")
+                        }
+                    }
             }
         }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 
     @SuppressLint("MissingPermission")
@@ -55,22 +70,6 @@ class BusinessesListFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (arePermsGranted) {
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
-                    location?.let {
-                        yelpViewModel.location = location
-                        getBusinessesList()
-                        yelpViewModel.getBusinessesList()
-                    } ?: run {
-                        Log.e(TAG, "onResume: location came as null", )
-                    }
-                }
-        } else Log.e(TAG, "onResume: Permissions not granted", )
-        if (yelpViewModel.location != null)
-            getBusinessesList()
 
         binding.rvBusinessList.apply {
             layoutManager = LinearLayoutManager(
@@ -94,11 +93,15 @@ class BusinessesListFragment : BaseFragment() {
                     Log.d(TAG, "getBusinessesList: ${state.response}")
                     businessListAdapter.updateBusinesses(state.response!!)
                 }
-                is UIState.ERROR -> {}
+                is UIState.ERROR -> {
+                    showError(state.error.localizedMessage)
+                }
             }
         }
     }
 
+    @SuppressLint("MissingPermission")
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>, // it is going to contained strings of permissions asked
@@ -108,7 +111,23 @@ class BusinessesListFragment : BaseFragment() {
 
         if (requestCode == 900) {
             grantResults.forEach {
-                arePermsGranted = it == PackageManager.PERMISSION_GRANTED
+                yelpViewModel.arePermsGranted = it == PackageManager.PERMISSION_GRANTED
+                Log.d(TAG, "onRequestPermissionsResult: permissions approved")
+                if (yelpViewModel.arePermsGranted) {
+                    val fusedLocationClient =
+                        LocationServices.getFusedLocationProviderClient(requireContext())
+                    fusedLocationClient.lastLocation
+                        .addOnSuccessListener { location: Location? ->
+                            // Got last known location. In some rare situations this can be null.
+                            location?.let {
+                                yelpViewModel.location = location
+                                getBusinessesList()
+                                yelpViewModel.getBusinessesList()
+                            } ?: run {
+                                Log.e(TAG, "onResume: location came as null",)
+                            }
+                        }
+                }
             }
         }
     }

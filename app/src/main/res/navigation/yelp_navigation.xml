@@ -23,4 +23,33 @@
         tools:layout="@layout/fragment_bussiness_detail"
         android:label="Business Detail Fragment"/>
 
+    <fragment
+        android:id="@+id/search_history_frag"
+        android:name="com.example.yelpappcc.presentation.view.SearchHistoryFragment"
+        tools:layout="@layout/fragment_search_history"
+        android:label="Search History Fragment">
+
+        <action
+            android:id="@+id/action_navigate_to_business_history_fragment"
+            app:destination="@id/businesses_history_list_frag" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/businesses_history_list_frag"
+        android:name="com.example.yelpappcc.presentation.view.BusinessesHistoryFragment"
+        tools:layout="@layout/fragment_businesses_list"
+        android:label="Business History List Fragment" >
+
+        <action
+            android:id="@+id/action_navigate_to_history_detail_fragment"
+            app:destination="@id/business_history_detail_frag" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/business_history_detail_frag"
+        android:name="com.example.yelpappcc.presentation.view.BusinessHistoryDetailFragment"
+        tools:layout="@layout/fragment_bussiness_detail"
+        android:label="Business Detail Fragment"/>
+
 </navigation>

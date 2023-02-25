@@ -52,7 +52,7 @@ class BusinessListViewHolder(
         binding.tvCity.text = item.location?.city
 
         itemView.setOnClickListener {
-            item.let { onClickBusiness(it) }
+            onClickBusiness(item)
         }
 
         Glide

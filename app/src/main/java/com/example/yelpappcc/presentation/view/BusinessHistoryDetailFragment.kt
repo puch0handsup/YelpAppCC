@@ -13,8 +13,7 @@ import com.example.yelpappcc.presentation.view.adapter.ReviewListAdapter
 import com.example.yelpappcc.utils.BaseFragment
 import com.example.yelpappcc.utils.UIState
 
-private const val TAG = "BusinessDetailFragment"
-class BusinessDetailFragment : BaseFragment() {
+class BusinessHistoryDetailFragment : BaseFragment() {
 
     private val binding by lazy {
         FragmentBussinessDetailBinding.inflate(layoutInflater)
@@ -26,7 +25,7 @@ class BusinessDetailFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val businessItem = yelpViewModel.selectedBusiness
+        val businessItem = yelpViewModel.selectedBusinessHistory
         binding.rvReviewsList.apply {
             layoutManager = LinearLayoutManager(
                 requireContext(),
@@ -40,8 +39,7 @@ class BusinessDetailFragment : BaseFragment() {
         binding.tvRestaurantPrice.text = businessItem.price?: "New"
         binding.tvRestaurantName.text = businessItem.name
 
-        Glide
-            .with(binding.root)
+        Glide.with(binding.root)
             .load(businessItem.imageUrl)
             .centerCrop()
             .placeholder(R.drawable.baseline_person_24)
@@ -57,7 +55,6 @@ class BusinessDetailFragment : BaseFragment() {
             when(state) {
                 is UIState.LOADING -> {}
                 is UIState.SUCCESS -> {
-                    Log.d(TAG, "getReviews: ${state.response}")
                     reviewsAdapter.updateReviews(state.response!!)
                 }
                 is UIState.ERROR -> {}
