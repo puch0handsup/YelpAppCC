@@ -54,11 +54,15 @@ class BusinessesListFragment : BaseFragment() {
                             getBusinessesList()
                             yelpViewModel.getBusinessesList()
                         } ?: run {
-                            Log.e(TAG, "onResume: location came as null", )
+                            showError("No location found")
                         }
                     }
             }
         }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
     }
 
     @SuppressLint("MissingPermission")
@@ -89,7 +93,9 @@ class BusinessesListFragment : BaseFragment() {
                     Log.d(TAG, "getBusinessesList: ${state.response}")
                     businessListAdapter.updateBusinesses(state.response!!)
                 }
-                is UIState.ERROR -> {}
+                is UIState.ERROR -> {
+                    showError(state.error.localizedMessage)
+                }
             }
         }
     }
@@ -108,7 +114,8 @@ class BusinessesListFragment : BaseFragment() {
                 yelpViewModel.arePermsGranted = it == PackageManager.PERMISSION_GRANTED
                 Log.d(TAG, "onRequestPermissionsResult: permissions approved")
                 if (yelpViewModel.arePermsGranted) {
-                    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+                    val fusedLocationClient =
+                        LocationServices.getFusedLocationProviderClient(requireContext())
                     fusedLocationClient.lastLocation
                         .addOnSuccessListener { location: Location? ->
                             // Got last known location. In some rare situations this can be null.
@@ -117,7 +124,7 @@ class BusinessesListFragment : BaseFragment() {
                                 getBusinessesList()
                                 yelpViewModel.getBusinessesList()
                             } ?: run {
-                                Log.e(TAG, "onResume: location came as null", )
+                                Log.e(TAG, "onResume: location came as null",)
                             }
                         }
                 }
